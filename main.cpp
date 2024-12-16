@@ -29,6 +29,18 @@ public:
 	virtual BankAccount *findAccount(std::string accountNumber) = 0;        
 };
 
+class MapStorage : public IAccountStorage{
+    std::map<std::string,BankAccount> accounts;
+public:
+    void addAccount(BankAccount account) override{
+        accounts[account.getAccountNumber()] = account;
+    }
+    BankAccount *findAccount(std::string accountNumber){
+        return &accounts[accountNumber];
+    } 
+    
+};
+
 class VectorAccountStorage: public IAccountStorage{
         std::vector<BankAccount> accounts;
 public:
@@ -40,7 +52,8 @@ public:
         BankAccount *ret = nullptr;
         for(BankAccount &account : accounts){
             if(account.getAccountNumber() == accountNumber ){
-                ret = &account;                                        
+                //ret = &account;      
+                return &account;                                  
             }
         }
         return ret;
@@ -75,7 +88,8 @@ public:
 
 int main(int, char**){
     //VectorAccountStorage storage;
-    VectorAccountStorage storage;
+    //VectorAccountStorage storage;
+    MapStorage storage;
     //MapAccountStorage storage;
     Bank bank(&storage);
 
